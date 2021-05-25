@@ -46,7 +46,7 @@ namespace Xamarin.CommunityToolkit.Behaviors
 		}
 
 		static void OnMaskPropertyChanged(BindableObject bindable, object oldValue, object newValue)
-			=> ((MaskedBehavior)bindable).SetPositions();
+			=> ((MaskedBehavior)bindable).OnMaskChanged();
 
 		static void OnUnMaskedCharacterPropertyChanged(BindableObject bindable, object oldValue, object newValue)
 			=> ((MaskedBehavior)bindable).OnMaskChanged();
@@ -114,11 +114,15 @@ namespace Xamarin.CommunityToolkit.Behaviors
 		string RemoveMask(string text)
 		{
 			var maskChars = positions
-				.Select(c => c.Value)
-				.Distinct()
+				.Select(c => (c.Key, c.Value))
 				.ToArray();
 
-			return string.Join(string.Empty, text.Split(maskChars));
+			var textIndex = text.ToCharArray()
+				.Select((value, index) => (index, value))
+				.Where(x => !maskChars.Contains((x.index, x.value)))
+				.ToList();
+
+			return string.Join(string.Empty, textIndex.Select(x => x.value).ToList());
 		}
 
 		void ApplyMask(string? text)
@@ -128,17 +132,15 @@ namespace Xamarin.CommunityToolkit.Behaviors
 				if (text.Length > (Mask?.Length ?? 0))
 					text = text.Remove(text.Length - 1);
 
+				var length = text.Length;
+
 				text = RemoveMask(text);
 				foreach (var position in positions)
 				{
-					if (text.Length < position.Key + 1)
-						continue;
+					if (length < position.Key + 1)
+						break;
 
-					var value = position.Value.ToString();
-
-					// !important - If user types in masked value, don't add masked value
-					if (text.Substring(position.Key, 1) != value)
-						text = text.Insert(position.Key, value);
+					text = text.Insert(position.Key, position.Value.ToString());
 				}
 			}
 
