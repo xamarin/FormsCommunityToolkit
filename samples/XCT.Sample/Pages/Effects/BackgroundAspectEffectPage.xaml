@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<pages:BasePage
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+    xmlns:pages="clr-namespace:Xamarin.CommunityToolkit.Sample.Pages"
+    xmlns:effects="clr-namespace:Xamarin.CommunityToolkit.Effects;assembly=Xamarin.CommunityToolkit"
+    x:Class="Xamarin.CommunityToolkit.Sample.Pages.Effects.BackgroundAspectEffectPage"
+    effects:BackgroundAspectEffect.Aspect="Fill">
+    <ContentPage.BackgroundImageSource>
+         <x:String>https://instabug.com/blog/wp-content/uploads/2018/10/Oct_Articles_01_Xamarin.png</x:String>
+    </ContentPage.BackgroundImageSource>
+    <ContentPage.Content>
+        <Frame HasShadow="False"
+               Padding="20"
+               BorderColor="SlateGray"
+               VerticalOptions="Center"
+               HorizontalOptions="Center">
+            <StackLayout Orientation="Horizontal">
+                <RadioButton x:Name="RadioFill" Content="Fill" IsChecked="True" CheckedChanged="OnOptionChecked"/>
+                <RadioButton x:Name="RadioAspectFit" Content="AspectFit" CheckedChanged="OnOptionChecked"/>
+                <RadioButton x:Name="RadioAspectFill" Content="AspectFill" CheckedChanged="OnOptionChecked"/>
+            </StackLayout>
+        </Frame>
+    </ContentPage.Content>
+</pages:BasePage>
